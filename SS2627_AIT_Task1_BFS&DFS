@@ -1,0 +1,69 @@
+from collections import deque
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}
+def bfs_recursive(graph, queue, visited, target=None):
+    if not queue:
+        return False
+    current = queue.popleft()
+    print(current, end=" ")
+    if current == target:
+        return True
+    for neighbor in graph[current]:
+        if neighbor not in visited:
+            visited.add(neighbor)
+            queue.append(neighbor)
+    return bfs_recursive(graph, queue, visited, target)
+def bfs(graph, start, target=None):
+    visited = set()
+    queue = deque()
+    visited.add(start)
+    queue.append(start)
+    print("BFS Traversal:", end=" ")
+    found = bfs_recursive(graph, queue, visited, target)
+    print()
+    if target is not None:
+        if found:
+            print("Target node", target, "found.")
+        else:
+            print("Target node", target, "not found.")
+def dfs_recursive(graph, node, visited, target=None):
+    if node in visited:
+        return False
+    visited.add(node)
+    print(node, end=" ")
+    if node == target:
+        return True
+    for neighbor in graph[node]:
+        if dfs_recursive(graph, neighbor, visited, target):
+            return True
+    return False
+def dfs(graph, start, target=None):
+    visited = set()
+    print("DFS Traversal:", end=" ")
+    found = dfs_recursive(graph, start, visited, target)
+    print()
+
+    if target is not None:
+        if found:
+            print("Target node", target, "found.")
+        else:
+            print("Target node", target, "not found.")
+print("GRAPH SEARCH ALGORITHM")
+print("\nGraph Representation:")
+for node in graph:
+    print(node, "->", graph[node])
+print("\nBREADTH FIRST SEARCH")
+bfs(graph, 'A')
+print("\nDEPTH FIRST SEARCH")
+dfs(graph, 'A')
+print("\nBFS SEARCH FOR NODE F")
+bfs(graph, 'A', 'F')
+print("\nDFS SEARCH FOR NODE F")
+dfs(graph, 'A', 'F')
